@@ -1,23 +1,29 @@
 import axios from 'axios'
-import detectMocha from 'detect-mocha'
+import { cacheAdapterEnhancer } from 'axios-extensions'
+// import detectMocha from 'detect-mocha'
+
+// const TEST_MODE = detectMocha()
 
 const DB = 'https://hacker-news.firebaseio.com'
 const VER = 'v0'
 const EXTENSION = '.json'
 
-const TEST_MODE = detectMocha()
-
-const init = () => {
-  // CORS Settings
-  const CORS_URL = !TEST_MODE
-    ? 'http://localhost' // on browser
-    : 'http://localhost' // on mocha
-  axios.defaults.headers
-    .get['Access-Control-Allow-Origin'] = CORS_URL
-}
+const instance = axios.create({
+  baseURL: [DB, VER].join('/'),
+  adapter: cacheAdapterEnhancer(
+    axios.defaults.adapter, { enabledByDefault: false }),
+  headers: {
+    method: 'get',
+    'Content-Type': 'application/json;charset=utf-8'/*,
+    'Access-Control-Allow-Origin': !TEST_MODE
+      ? 'http://localhost' // on browser
+      : 'http://localhost' // on mocha
+    */
+  }
+})
 
 const makeURL = (...api) => {
-  return [DB, VER, ...api].join('/') + EXTENSION
+  return [...api].join('/') + EXTENSION
 }
 
 const makeQueryString = (paramObj) => {
@@ -41,10 +47,11 @@ const hnapi = {
   makeQueryString,
   fetch: (...api) => {
     const url = makeURL(...api)
-    TEST_MODE && console.log('fetching from ' + url)
-    return axios.get(url)
+    return instance.get(url, {
+      forceUpdate: history.action === 'PUSH',
+      cache: true
+    })
   }
 }
 
-init()
 export default hnapi
