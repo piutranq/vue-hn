@@ -2,7 +2,7 @@
   <div>
     <span v-for="route in routes" :key="route.path">
       <router-link class="routerLink"
-        v-bind:to="route.path" v-text="route.name"/>
+        v-bind:to="route.path" v-text="route.display"/>
     </span>
   </div>
 </template>
