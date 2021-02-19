@@ -14,28 +14,39 @@ const expectArrayType = (data, type) => {
 }
 
 const isStories = res => {
-  expectStatus(res, 200) // is OK?
+  expectStatus(res, 200)
   expectArrayType(res.data, 'number')
 }
 
 const isUpdates = res => {
-  expectStatus(res, 200) // is OK?
+  expectStatus(res, 200)
   expectArrayType(res.data.items, 'number')
   expectArrayType(res.data.profiles, 'string')
 }
 
 const isMaxItem = res => {
-  expectStatus(res, 200) // is OK?
+  expectStatus(res, 200)
   expectType(res.data, 'number')
 }
 
 const isUser = res => {
-  expectStatus(res, 200) // is OK?
+  expectStatus(res, 200)
   expectType(res.data.about, 'string')
   expectType(res.data.created, 'number')
   expectType(res.data.id, 'string')
   expectType(res.data.karma, 'number')
   expectArrayType(res.data.submitted, 'number')
+}
+
+const isItem = res => {
+  expectStatus(res, 200)
+  expectType(res.data.by, 'string')
+  expectType(res.data.id, 'number')
+  expectArrayType(res.data.kids, 'number')
+  expectType(res.data.parent, 'number')
+  expectType(res.data.text, 'string')
+  expectType(res.data.time, 'number')
+  expectType(res.data.type, 'string')
 }
 
 const testFetch = (done, verify, ...api) => {
@@ -101,5 +112,12 @@ describe('@/lib/hnapi.js', () => {
     const api = hnapi.USER
     const profile = 'sequoia'
     testFetch(done, verify, api, profile)
+  })
+
+  it('fetch some story', done => {
+    const verify = isItem
+    const api = hnapi.ITEM
+    const id = 22496313
+    testFetch(done, verify, api, id)
   })
 })
