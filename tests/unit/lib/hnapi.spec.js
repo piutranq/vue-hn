@@ -114,7 +114,7 @@ describe('@/lib/hnapi.js', () => {
     testFetch(done, verify, api, profile)
   })
 
-  it('fetch some story', done => {
+  it('fetch some item', done => {
     const verify = isItem
     const api = hnapi.ITEM
     const id = 22496313
