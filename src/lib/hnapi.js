@@ -22,8 +22,8 @@ const instance = axios.create({
   }
 })
 
-const makeURL = (...api) => {
-  return [...api].join('/') + EXTENSION
+const makeURL = (api) => {
+  return api.join('/') + EXTENSION
 }
 
 const makeQueryString = (paramObj) => {
@@ -45,10 +45,10 @@ const hnapi = {
   },
   makeURL,
   makeQueryString,
-  fetch: (...api) => {
-    const url = makeURL(...api)
+  fetch: (api, forceUpdate = false) => {
+    const url = makeURL(api)
     return instance.get(url, {
-      forceUpdate: history.action === 'PUSH',
+      forceUpdate,
       cache: true
     })
   }
