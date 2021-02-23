@@ -1,52 +1,44 @@
-import { expect } from 'chai'
+import TypeUtil from '@/lib/utils/typeutil'
 import hnapi from '@/lib/hnapi'
 
-const expectStatus = (res, code) => {
-  expect(res.status).to.equals(code)
-}
-
-const expectType = (data, type) => {
-  expect(data).to.be.a(type)
-}
-
-const expectArrayType = (data, type) => {
-  data.forEach(e => expectType(e, type))
-}
-
 const isStories = res => {
-  expectStatus(res, 200)
-  expectArrayType(res.data, 'number')
+  TypeUtil.checkValue(res.status, 200)
+  TypeUtil.checkArray(res.data, 'number', true)
 }
 
 const isUpdates = res => {
-  expectStatus(res, 200)
-  expectArrayType(res.data.items, 'number')
-  expectArrayType(res.data.profiles, 'string')
+  TypeUtil.checkValue(res.status, 200)
+  TypeUtil.checkArray(res.data.items, 'number', true)
+  TypeUtil.checkArray(res.data.profiles, 'string', true)
 }
 
 const isMaxItem = res => {
-  expectStatus(res, 200)
-  expectType(res.data, 'number')
+  TypeUtil.checkValue(res.status, 200)
+  TypeUtil.checkType(res.data, 'number', true)
 }
 
 const isUser = res => {
-  expectStatus(res, 200)
-  expectType(res.data.about, 'string')
-  expectType(res.data.created, 'number')
-  expectType(res.data.id, 'string')
-  expectType(res.data.karma, 'number')
-  expectArrayType(res.data.submitted, 'number')
+  TypeUtil.checkValue(res.status, 200)
+  TypeUtil.checkType(res.data.about, 'string')
+  TypeUtil.checkType(res.data.created, 'number')
+  TypeUtil.checkType(res.data.id, 'string')
+  TypeUtil.checkType(res.data.karma, 'number')
+  TypeUtil.checkArray(res.data.submitted, 'number')
 }
 
 const isItem = res => {
-  expectStatus(res, 200)
-  expectType(res.data.by, 'string')
-  expectType(res.data.id, 'number')
-  expectArrayType(res.data.kids, 'number')
-  expectType(res.data.parent, 'number')
-  expectType(res.data.text, 'string')
-  expectType(res.data.time, 'number')
-  expectType(res.data.type, 'string')
+  TypeUtil.checkValue(res.status, 200)
+
+  // Required property
+  TypeUtil.checkType(res.data.id, 'number', true)
+  TypeUtil.checkType(res.data.type, 'string', true)
+
+  // Optional property
+  TypeUtil.checkType(res.data.deleted, 'boolean')
+  TypeUtil.checkType(res.data.by, 'string')
+  TypeUtil.checkType(res.data.time, 'number')
+  TypeUtil.checkType(res.data.dead, 'boolean')
+  TypeUtil.checkArray(res.data.kids, 'number')
 }
 
 const testFetch = (done, verify, api) => {

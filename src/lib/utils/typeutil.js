@@ -20,12 +20,11 @@ const checkRequired = (value) => {
 
 const checkType = (value, expected, required = false) => {
   required && (value = checkRequired(value))
-  const actual = get(value)
-  if (actual === expected) return value
+  if (get(value) === expected || value === undefined) return value
   else {
     throw new TypeError([
       `expected ${expected}, `,
-      `but the given value ${value} is ${actual}`
+      `but the given value ${value} is ${get(value)}`
     ].join(''))
   }
 }
@@ -42,7 +41,7 @@ const checkValue = (value, expected) => {
 
 const checkArray = (value, expected, required = false) => {
   value = checkType(value, 'Array', required)
-  return value.map(e => checkType(value, expected))
+  return value.map(e => checkType(e, expected))
 }
 
 const TypeUtil = {
