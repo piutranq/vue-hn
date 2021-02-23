@@ -41,6 +41,7 @@ const checkValue = (value, expected) => {
 
 const checkArray = (value, expected, required = false) => {
   value = checkType(value, 'Array', required)
+  if (value === undefined) return value
   return value.map(e => checkType(e, expected))
 }
 

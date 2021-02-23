@@ -4,7 +4,7 @@ class Base {
   constructor (input) {
     // Required
     this.id = TypeUtil.checkType(input.id, 'number', true)
-    // the `.type` property is checked by each child class
+    this.type = TypeUtil.checkType(input.type, 'string', true)
 
     // Optional
     this.deleted = TypeUtil.checkType(input.deleted, 'boolean')
