@@ -18,7 +18,7 @@ const checkRequired = (value) => {
   else throw new RequiredPropertyError()
 }
 
-const check = (value, expected, required = false) => {
+const checkType = (value, expected, required = false) => {
   required && (value = checkRequired(value))
   const actual = get(value)
   if (actual === expected) return value
@@ -30,16 +30,27 @@ const check = (value, expected, required = false) => {
   }
 }
 
+const checkValue = (value, expected) => {
+  const actual = value
+  if (actual === expected) return value
+  else {
+    throw new Error(
+      `expected ${expected}, but the given value is ${value}`
+    )
+  }
+}
+
 const checkArray = (value, expected, required = false) => {
-  value = check(value, 'Array', required)
-  return value.map(e => check(value, expected))
+  value = checkType(value, 'Array', required)
+  return value.map(e => checkType(value, expected))
 }
 
 const TypeUtil = {
   isPrimitive,
   isObject,
   get,
-  check,
+  checkValue,
+  checkType,
   checkArray,
   checkRequired
 }
