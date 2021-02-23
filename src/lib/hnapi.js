@@ -4,6 +4,14 @@ import { cacheAdapterEnhancer } from 'axios-extensions'
 
 // const TEST_MODE = detectMocha()
 
+class HTTPStatusError extends Error {
+  constructor (expected, actual) {
+    super()
+    this.name = 'HTTPStatusError'
+    this.message = `http status code '${expected}' is expected, but actual is '${actual}'`
+  }
+}
+
 const DB = 'https://hacker-news.firebaseio.com'
 const VER = 'v0'
 const EXTENSION = '.json'
@@ -51,7 +59,8 @@ const hnapi = {
       forceUpdate,
       cache: true
     })
-  }
+  },
+  HTTPStatusError
 }
 
 export default hnapi

@@ -12,6 +12,10 @@ class User {
     this.about = TypeUtil.checkType(input.about, 'string')
     this.submitted = TypeUtil.checkArray(input.submitted, 'number')
   }
+
+  static createUser (input) {
+    return new User(input)
+  }
 }
 
 export default User
