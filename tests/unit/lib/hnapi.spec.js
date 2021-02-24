@@ -50,7 +50,7 @@ const testFetch = (done, verify, api) => {
     .catch(done)
 }
 
-describe('@/lib/hnapi.js', () => {
+describe('@/lib/hnapi.js (Test the actual http request)', () => {
   it('fetch newstories', done => {
     const verify = isStories
     const api = hnapi.STORIES.NEW
