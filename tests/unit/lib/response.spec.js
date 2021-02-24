@@ -1,4 +1,4 @@
-import response from '../../mocks/response'
+import response from '@tests/mocks/response'
 import Item from '@/lib/response/item'
 import User from '@/lib/response/user'
 
