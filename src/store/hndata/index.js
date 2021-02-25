@@ -4,6 +4,7 @@ import mutations from './mutations'
 import actions from './actions'
 
 const hndata = {
+  namespaced: true,
   state,
   getters,
   mutations,

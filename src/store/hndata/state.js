@@ -3,14 +3,7 @@ const state = {
   user: {},
   max: 0,
   updates: {},
-  stories: {
-    new: [],
-    top: [],
-    best: [],
-    ask: [],
-    show: [],
-    job: []
-  }
+  stories: ['foo']
 }
 
 export default state

@@ -3,7 +3,7 @@ const mutations = {
   replaceUser (state, user) { state.user = user },
   replaceMax (state, max) { state.max = max },
   replaceUpdates (state, updates) { state.updates = updates },
-  replaceStories (state, obj) { state.stories[obj.key] = obj.list }
+  replaceStories (state, stories) { state.stories = stories }
 }
 
 export default mutations
