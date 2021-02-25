@@ -1,61 +1,54 @@
 import hnapi from '@/lib/hnapi'
-import Item from '@/lib/response/item'
-import User from '@/lib/response/user'
-import TypeUtil from '@/lib/utils/typeutil'
-
-const checkHTTPStatus = (res, expected) => {
-  if (res.status !== expected) {
-    throw new hnapi.HTTPStatusError(expected, res.status)
-  }
-  return res.status
-}
 
 const actions = {
   async fetchItem (context, id, forceUpdate = false) {
-    const res = await hnapi.fetch([hnapi.ITEM, id], forceUpdate)
-    checkHTTPStatus(res, 200)
-    const item = Item.createItem(res.data)
-    context.commit('replaceItem', item)
+    const data = await hnapi.fetchItem(id, forceUpdate)
+    context.commit('replaceItem', data)
   },
 
   async fetchUser (context, id, forceUpdate = false) {
-    const res = await hnapi.fetch([hnapi.USER, id], forceUpdate)
-    checkHTTPStatus(res, 200)
-    const user = User.createUser(res.data)
-    context.commit('replaceUser', user)
+    const data = await hnapi.fetchUser(id, forceUpdate)
+    context.commit('replaceUser', data)
   },
 
   async fetchMax (context, forceUpdate = false) {
-    const res = await hnapi.fetch([hnapi.MAX_ITEM], forceUpdate)
-    checkHTTPStatus(res, 200)
-    const max = TypeUtil.checkType(res.data, 'number')
-    context.commit('replaceMax', max)
+    const data = await hnapi.fetchMax(forceUpdate)
+    context.commit('replaceMax', data)
   },
 
   async fetchUpdates (context, forceUpdate = false) {
-    const res = await hnapi.fetch([hnapi.UPDATES], forceUpdate)
-    checkHTTPStatus(res, 200)
-    const items = TypeUtil.checkArray(res.data.items, 'number')
-    const profiles = TypeUtil.checkArray(res.data.profiles, 'string')
-    context.commit('repaceUpdates', { items, profiles })
+    const data = await hnapi.fetchUpdates(forceUpdate)
+    context.commit('repaceUpdates', data)
   },
 
-  async fetchStories (context, api, forceUpdate = false) {
-    switch (api) {
-      case hnapi.STORIES.NEW:
-      case hnapi.STORIES.TOP:
-      case hnapi.STORIES.BEST:
-      case hnapi.STORIES.ASK:
-      case hnapi.STORIES.SHOW:
-      case hnapi.STORIES.JOB:
-        break
-      default:
-        throw new Error(`Given api string '${api}' is invalid`)
-    }
-    const res = await hnapi.fetch(api, forceUpdate)
-    checkHTTPStatus(res, 200)
-    const list = TypeUtil.checkArray(res.data, 'number')
-    context.commit('repaceStories', { key: api, list })
+  async fetchNewStories (context, forceUpdate = false) {
+    const data = await hnapi.fetchNewStories(forceUpdate)
+    context.commit('repaceStories', data)
+  },
+
+  async fetchTopStories (context, forceUpdate = false) {
+    const data = await hnapi.fetchTopStories(forceUpdate)
+    context.commit('repaceStories', data)
+  },
+
+  async fetchBestStories (context, forceUpdate = false) {
+    const data = await hnapi.fetchBestStories(forceUpdate)
+    context.commit('repaceStories', data)
+  },
+
+  async fetchAskStories (context, forceUpdate = false) {
+    const data = await hnapi.fetchAskStories(forceUpdate)
+    context.commit('repaceStories', data)
+  },
+
+  async fetchShowStories (context, forceUpdate = false) {
+    const data = await hnapi.fetchShowStories(forceUpdate)
+    context.commit('repaceStories', data)
+  },
+
+  async fetchJobStories (context, forceUpdate = false) {
+    const data = await hnapi.fetchJobStories(forceUpdate)
+    context.commit('repaceStories', data)
   }
 }
 

@@ -6,7 +6,6 @@ class RequiredPropertyError extends Error {
 }
 
 const isPrimitive = (value) => (typeof value !== 'object')
-const isObject = (value) => (typeof value === 'object')
 
 const get = (value) => {
   if (isPrimitive(value)) return typeof value
@@ -23,19 +22,9 @@ const checkType = (value, expected, required = false) => {
   if (get(value) === expected || value === undefined) return value
   else {
     throw new TypeError([
-      `expected ${expected}, `,
+      `expected type is ${expected}, `,
       `but the given value ${value} is ${get(value)}`
     ].join(''))
-  }
-}
-
-const checkValue = (value, expected) => {
-  const actual = value
-  if (actual === expected) return value
-  else {
-    throw new Error(
-      `expected ${expected}, but the given value is ${value}`
-    )
   }
 }
 
@@ -46,13 +35,8 @@ const checkArray = (value, expected, required = false) => {
 }
 
 const TypeUtil = {
-  isPrimitive,
-  isObject,
-  get,
-  checkValue,
   checkType,
-  checkArray,
-  checkRequired
+  checkArray
 }
 
 export default TypeUtil
