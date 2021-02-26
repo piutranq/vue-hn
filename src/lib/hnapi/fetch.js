@@ -15,7 +15,7 @@ const makeQuery = (queries) =>
 const fetchURL = async (resources, queries, forceUpdate = false) => {
   const url = makeURL(resources) + makeQuery(queries)
   const res = await instance
-    .get(url, { forceUpdate, cache: true })
+    .get(url)
 
   // Check HTTP Status Code: Should be 200
   if (res.status !== 200) throw new HTTPStatusError(res.status, 200)

@@ -1,7 +1,4 @@
-// 'hnapi/instance.js': Axios Instance
-
 import axios from 'axios'
-import { cacheAdapterEnhancer } from 'axios-extensions'
 import URL from '@/lib/hnapi/url'
 // import detectMocha from 'detect-mocha'
 
@@ -9,8 +6,6 @@ import URL from '@/lib/hnapi/url'
 
 const instance = axios.create({
   baseURL: [URL.db, URL.ver].join('/'),
-  adapter: cacheAdapterEnhancer(
-    axios.defaults.adapter, { enabledByDefault: false }),
   headers: {
     method: 'get',
     'Content-Type': 'application/json;charset=utf-8'/*,
