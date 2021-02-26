@@ -59,7 +59,22 @@ const actions = {
     const data = await hnapi.fetch.jobstories(forceUpdate)
     context.commit('replaceStories', data)
     return data
+  },
+
+  async fetchPreviews (context, payload = { range: [0, 20], forceUpdate: false }) {
+    const range = payload.range
+    const forceUpdate = payload.forceUpdate
+    const sliced = context.state.stories
+      .slice(range[0], range[1])
+    const preview = await Promise.all(
+      sliced.map(async (e, i) => {
+        return await hnapi.fetch.item(e, forceUpdate)
+      })
+    )
+    context.commit('replacePreviews', preview)
+    return preview
   }
+
 }
 
 export default actions

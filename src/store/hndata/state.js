@@ -2,8 +2,12 @@ const state = {
   item: {},
   user: {},
   max: 0,
-  updates: {},
-  stories: ['foo']
+  updates: {
+    items: [],
+    profiles: []
+  },
+  stories: [],
+  previews: []
 }
 
 export default state

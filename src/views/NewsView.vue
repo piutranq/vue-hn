@@ -9,13 +9,14 @@ import { mapActions } from 'vuex'
 
 export default {
   created: async function () {
-    const data = await this['hndata/fetchNewStories'](true)
-    console.log(this.$store.state.hndata.stories)
-    console.log(data)
+    await this['hndata/fetchNewStories']()
+    await this['hndata/fetchPreviews']()
+    console.log(this.$store.state.hndata.previews)
   },
   methods: {
     ...mapActions([
-      'hndata/fetchNewStories'
+      'hndata/fetchNewStories',
+      'hndata/fetchPreviews'
     ])
   }
 }
