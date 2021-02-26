@@ -1,67 +1,70 @@
 import hnapi from '@/lib/hnapi'
 
 const actions = {
-  async fetchItem (context, id, forceUpdate = false) {
-    const data = await hnapi.fetch.item(id, forceUpdate)
+  async fetchItem (context, payload = { id: 0, forceUpdate: false }) {
+    const data = await hnapi.fetch.item(payload.id, payload.forceUpdate)
     context.commit('replaceItem', data)
     return data
   },
 
-  async fetchUser (context, id, forceUpdate = false) {
-    const data = await hnapi.fetch.user(id, forceUpdate)
+  async fetchUser (context, payload = { id: '', forceUpdate: false }) {
+    const data = await hnapi.fetch.user(payload.id, payload.forceUpdate)
     context.commit('replaceUser', data)
     return data
   },
 
-  async fetchMax (context, forceUpdate = false) {
-    const data = await hnapi.fetch.max(forceUpdate)
+  async fetchMax (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.max(payload.forceUpdate)
     context.commit('replaceMax', data)
     return data
   },
 
-  async fetchUpdates (context, forceUpdate = false) {
-    const data = await hnapi.fetch.updates(forceUpdate)
+  async fetchUpdates (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.updates(payload.forceUpdate)
     context.commit('repaceUpdates', data)
     return data
   },
 
-  async fetchNewStories (context, forceUpdate = false) {
-    const data = await hnapi.fetch.newstories(forceUpdate)
+  async fetchNewStories (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.newstories(payload.forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchTopStories (context, forceUpdate = false) {
-    const data = await hnapi.fetch.topstories(forceUpdate)
+  async fetchTopStories (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.topstories(payload.forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchBestStories (context, forceUpdate = false) {
-    const data = await hnapi.fetch.beststories(forceUpdate)
+  async fetchBestStories (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.beststories(payload.forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchAskStories (context, forceUpdate = false) {
-    const data = await hnapi.fetch.askstories(forceUpdate)
+  async fetchAskStories (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.askstories(payload.forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchShowStories (context, forceUpdate = false) {
-    const data = await hnapi.fetch.showstories(forceUpdate)
+  async fetchShowStories (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.showstories(payload.forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchJobStories (context, forceUpdate = false) {
-    const data = await hnapi.fetch.jobstories(forceUpdate)
+  async fetchJobStories (context, payload = { forceUpdate: false }) {
+    const data = await hnapi.fetch.jobstories(payload.forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchPreviews (context, payload = { range: [0, 20], forceUpdate: false }) {
+  async fetchPreviews (
+    context,
+    payload = { range: [0, 20], forceUpdate: false }
+  ) {
     const range = payload.range
     const forceUpdate = payload.forceUpdate
     const sliced = context.state.stories
