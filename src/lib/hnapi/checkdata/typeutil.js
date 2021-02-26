@@ -5,32 +5,35 @@ class RequiredPropertyError extends Error {
   }
 }
 
-const isPrimitive = (value) => (typeof value !== 'object')
+const TypeErrorMessage = (expected, value) => [
+  `expected type is ${expected}, `,
+  `but the given value ${value} is ${getType(value)}`
+].join('')
 
-const get = (value) => {
-  if (isPrimitive(value)) return typeof value
+const getType = (value) => {
+  if (typeof value !== 'object') return typeof value
   else return value.constructor.name
 }
 
 const checkRequired = (value) => {
-  if (value !== undefined) return value
+  if (typeof value !== 'undefined') return value
   else throw new RequiredPropertyError()
 }
 
 const checkType = (value, expected, required = false) => {
   required && (value = checkRequired(value))
-  if (get(value) === expected || value === undefined) return value
-  else {
-    throw new TypeError([
-      `expected type is ${expected}, `,
-      `but the given value ${value} is ${get(value)}`
-    ].join(''))
+  switch (getType(value)) {
+    case expected: return value
+    case 'undefined': return value
+    default: {
+      throw new TypeError(TypeErrorMessage(expected, value))
+    }
   }
 }
 
 const checkArray = (value, expected, required = false) => {
   value = checkType(value, 'Array', required)
-  if (value === undefined) return value
+  if (typeof value === 'undefined') return value
   return value.map(e => checkType(e, expected))
 }
 
