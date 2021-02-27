@@ -1,3 +1,4 @@
+import url from './url'
 import fetch from './fetch'
 import checkdata from './checkdata'
 import errors from './errors'
@@ -5,7 +6,8 @@ import errors from './errors'
 const hnapi = {
   checkdata,
   fetch,
-  errors
+  errors,
+  url
 }
 
 export default hnapi

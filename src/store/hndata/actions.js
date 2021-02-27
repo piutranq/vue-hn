@@ -31,44 +31,10 @@ const actions = {
     return data
   },
 
-  async fetchNewStories (context, payload = {}) {
+  async fetchStories (context, payload = {}) {
+    const type = hnapi.url.checkStoriesType(payload.type)
     const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.newstories(forceUpdate)
-    context.commit('replaceStories', data)
-    return data
-  },
-
-  async fetchTopStories (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.topstories(forceUpdate)
-    context.commit('replaceStories', data)
-    return data
-  },
-
-  async fetchBestStories (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.beststories(forceUpdate)
-    context.commit('replaceStories', data)
-    return data
-  },
-
-  async fetchAskStories (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.askstories(forceUpdate)
-    context.commit('replaceStories', data)
-    return data
-  },
-
-  async fetchShowStories (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.showstories(forceUpdate)
-    context.commit('replaceStories', data)
-    return data
-  },
-
-  async fetchJobStories (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.jobstories(forceUpdate)
+    const data = await hnapi.fetch.stories(type, forceUpdate)
     context.commit('replaceStories', data)
     return data
   },
@@ -76,7 +42,8 @@ const actions = {
   async fetchPreviews (context, payload = {}) {
     const range = 'range' in payload ? payload.range : [0, 20]
     const forceUpdate = 'forceUpdate' in payload
-    const sliced = context.state.stories.slice(range[0], range[1])
+    const data = await context.dispatch('fetchStories', payload)
+    const sliced = data.slice(range[0], range[1])
     const preview = await Promise.all(
       sliced.map(async (e, i) => {
         return await hnapi.fetch.item(e, forceUpdate)

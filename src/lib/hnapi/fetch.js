@@ -62,43 +62,8 @@ const updates = async (forceUpdate = false) => {
   return checkdata.updates(data)
 }
 
-const newstories = async (forceUpdate = false) => {
-  const resources = [URL.newStories]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
-  return checkdata.stories(data)
-}
-
-const topstories = async (forceUpdate = false) => {
-  const resources = [URL.topStories]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
-  return checkdata.stories(data)
-}
-
-const beststories = async (forceUpdate = false) => {
-  const resources = [URL.bestStories]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
-  return checkdata.stories(data)
-}
-
-const askstories = async (forceUpdate = false) => {
-  const resources = [URL.askStories]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
-  return checkdata.stories(data)
-}
-
-const showstories = async (forceUpdate = false) => {
-  const resources = [URL.showStories]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
-  return checkdata.stories(data)
-}
-
-const jobstories = async (forceUpdate = false) => {
-  const resources = [URL.jobStories]
+const stories = async (type, forceUpdate = false) => {
+  const resources = [URL.checkStoriesType(type)]
   const queries = []
   const data = await fetchURL(resources, queries, forceUpdate)
   return checkdata.stories(data)
@@ -109,12 +74,7 @@ const fetch = {
   user,
   maxitem,
   updates,
-  newstories,
-  topstories,
-  beststories,
-  askstories,
-  showstories,
-  jobstories
+  stories
 }
 
 export default fetch

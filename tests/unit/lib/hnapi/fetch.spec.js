@@ -12,28 +12,28 @@ chai.use(chaipromised)
 // by using '.skip' method of 'describe' or each 'it'
 // eg) describe.skip('...', () => { ... })
 describe('@/lib/hnapi/fetch', () => {
-  it('resolve newstories()', async () => {
-    await hnapi.fetch.newstories(true)
+  it('resolve stories(\'newstories\')', async () => {
+    await hnapi.fetch.stories('newstories', true)
   })
 
-  it('resolve topstories()', async () => {
-    await hnapi.fetch.topstories(true)
+  it('resolve stories(\'topstories\')', async () => {
+    await hnapi.fetch.stories('topstories', true)
   })
 
-  it('resolve beststories()', async () => {
-    await hnapi.fetch.beststories(true)
+  it('resolve stories(\'beststories\')', async () => {
+    await hnapi.fetch.stories('beststories', true)
   })
 
-  it('resolve askstories()', async () => {
-    await hnapi.fetch.askstories(true)
+  it('resolve stories(\'askstories\')', async () => {
+    await hnapi.fetch.stories('askstories', true)
   })
 
-  it('resolve showstories()', async () => {
-    await hnapi.fetch.showstories(true)
+  it('resolve stories(\'showstories\')', async () => {
+    await hnapi.fetch.stories('showstories', true)
   })
 
-  it('resolve jobstories()', async () => {
-    await hnapi.fetch.jobstories(true)
+  it('resolve stories(\'jobstories\')', async () => {
+    await hnapi.fetch.stories('jobstories', true)
   })
 
   it('resolve updates()', async () => {
