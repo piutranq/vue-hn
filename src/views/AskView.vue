@@ -1,12 +1,39 @@
 <template>
   <div>
     <h1>Ask</h1>
+    <ul>
+      <li v-for="story in this['hndata/previews']"
+        v-bind:key="story.id">
+        <!-- TODO: Make the preview component for each story -->
+        <a v-bind:href="story.url" v-text="story.title"/>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-export default {
+import { mapActions, mapGetters } from 'vuex'
 
+export default {
+  created: async function () {
+    const type = this.type
+    await this['hndata/fetchPreviews']({ type })
+  },
+  data () {
+    return {
+      type: 'askstories'
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'hndata/previews'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'hndata/fetchPreviews'
+    ])
+  }
 }
 </script>
 
