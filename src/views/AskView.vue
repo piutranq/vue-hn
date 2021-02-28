@@ -1,38 +1,34 @@
 <template>
   <div>
     <h1>Ask</h1>
-    <ul>
-      <li v-for="story in this['hndata/previews']"
-        v-bind:key="story.id">
-        <!-- TODO: Make the preview component for each story -->
-        <a v-bind:href="story.url" v-text="story.title"/>
-      </li>
-    </ul>
+    <div v-for="item in this.previews" :key="item.id">
+      <item-preview :item="item"/>
+    </div>
   </div>
 </template>
 
 <script>
+import ItemPreview from '@/components/ItemPreview.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  created: async function () {
+  components: { ItemPreview },
+  async created () {
     const type = this.type
-    await this['hndata/fetchPreviews']({ type })
+    await this.fetchPreviews({ type })
   },
-  data () {
-    return {
-      type: 'askstories'
-    }
-  },
+  data: () => ({
+    type: 'askstories'
+  }),
   computed: {
-    ...mapGetters([
-      'hndata/previews'
-    ])
+    ...mapGetters({
+      previews: 'hndata/previews'
+    })
   },
   methods: {
-    ...mapActions([
-      'hndata/fetchPreviews'
-    ])
+    ...mapActions({
+      fetchPreviews: 'hndata/fetchPreviews'
+    })
   }
 }
 </script>
