@@ -1,7 +1,10 @@
 import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
-import { CacheOnly, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
+import { CacheOnly, NetworkOnly, StaleWhileRevalidate }
+  from 'workbox-strategies'
+
+import hnapiURL from '@/lib/hnapi/url'
 
 self.skipWaiting()
 clientsClaim()
@@ -13,24 +16,18 @@ self.addEventListener('install', () => {
 })
 
 // Dynamic cache routings for hnapi request
-const baseURL = 'https://hacker-news.firebaseio.com'
+const routeDefault = ({ url, request }) =>
+  url.origin === hnapiURL.origin &&
+  request.headers.get('X-Caching-Strategy') === 'undefined'
 
-const routeDefault = ({ url }) => {
-  return (url.origin === baseURL)
-}
+const routeCacheOnly = ({ url, request }) =>
+  url.origin === hnapiURL.origin &&
+  request.headers.get('X-Caching-Strategy') === 'cacheOnly'
 
-const routeCacheOnly = ({ url, request }) => {
-  const cacheOnlyMode =
-    request.headers.get('X-Caching-Strategy') === 'cacheOnly'
-  return (url.origin === baseURL) && cacheOnlyMode
-}
-
-const routeNetworkOnly = ({ url, request }) => {
-  const networkOnlyMode =
+const routeNetworkOnly = ({ url, request }) =>
+  url.origin === hnapiURL.origin &&
   request.headers.get('X-Caching-Strategy') === 'networkOnly'
-  return (url.origin === baseURL) && networkOnlyMode
-}
 
-registerRoute(routeDefault, new StaleWhileRevalidate(), 'SET')
-registerRoute(routeCacheOnly, new CacheOnly(), 'SET')
-registerRoute(routeNetworkOnly, new NetworkOnly(), 'SET')
+registerRoute(routeDefault, new StaleWhileRevalidate(), 'GET')
+registerRoute(routeCacheOnly, new CacheOnly(), 'GET')
+registerRoute(routeNetworkOnly, new NetworkOnly(), 'GET')
