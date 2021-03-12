@@ -1,8 +1,7 @@
 import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
-import { CacheOnly, NetworkOnly, StaleWhileRevalidate }
-  from 'workbox-strategies'
+import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
 import hnapiURL from '@/lib/hnapi/url'
 
@@ -20,14 +19,14 @@ const routeDefault = ({ url, request }) =>
   url.origin === hnapiURL.origin &&
   request.headers.get('X-Caching-Strategy') === 'undefined'
 
-const routeCacheOnly = ({ url, request }) =>
+const routeCacheFirst = ({ url, request }) =>
   url.origin === hnapiURL.origin &&
-  request.headers.get('X-Caching-Strategy') === 'cacheOnly'
+  request.headers.get('X-Caching-Strategy') === 'cacheFirst'
 
-const routeNetworkOnly = ({ url, request }) =>
+const routeNetworkFirst = ({ url, request }) =>
   url.origin === hnapiURL.origin &&
-  request.headers.get('X-Caching-Strategy') === 'networkOnly'
+  request.headers.get('X-Caching-Strategy') === 'networkFirst'
 
 registerRoute(routeDefault, new StaleWhileRevalidate(), 'GET')
-registerRoute(routeCacheOnly, new CacheOnly(), 'GET')
-registerRoute(routeNetworkOnly, new NetworkOnly(), 'GET')
+registerRoute(routeCacheFirst, new CacheFirst(), 'GET')
+registerRoute(routeNetworkFirst, new NetworkFirst(), 'GET')
