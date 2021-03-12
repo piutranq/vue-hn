@@ -1,26 +1,35 @@
-import instance from './instance'
-import URL from './url'
-import checkdata from './checkdata'
-import errors from './errors'
+import instance from '@/lib/hnapi/instance'
+import hnapiURL from '@/lib/hnapi/url'
+import checkdata from '@/lib/hnapi/checkdata'
 
-const HTTPStatusError = errors.HTTPStatusError
-const ResponseNotExistError = errors.ResponseNotExistError
+class HTTPStatusError extends Error {
+  constructor (actual, expected) {
+    super()
+    this.name = 'HTTPStatusError'
+    this.message = `http status code ${expected} is expected, but actual is '${actual}'`
+  }
+}
 
-const makeURL = (resources) =>
-  resources.join('/') + URL.ext
+class ResponseNotExistError extends Error {
+  constructor (url) {
+    super()
+    this.name = 'ResponseNotExistError'
+    this.message = `requested to ${url}, but response data is not exists`
+  }
+}
 
-const makeQuery = (queries) =>
-  '?' + new URLSearchParams(queries).toString()
+const fetchData = async (paths, strategy) => {
+  const url = paths.join('/') + hnapiURL.extension
+  const opt = {
+    headers: {
+      'X-Caching-Strategy': strategy
+    }
+  }
 
-const fetchURL = async (resources, queries, forceUpdate = false) => {
-  const url = makeURL(resources) + makeQuery(queries)
-  const res = await instance
-    .get(url)
+  const res = await instance.get(url, opt)
 
-  // Check HTTP Status Code: Should be 200
   if (res.status !== 200) throw new HTTPStatusError(res.status, 200)
 
-  // Check HTTP Response Data: Should be anybody
   switch (res.data) {
     case []:
     case {}:
@@ -34,38 +43,33 @@ const fetchURL = async (resources, queries, forceUpdate = false) => {
   return res.data
 }
 
-const item = async (id, forceUpdate = false) => {
-  const resources = [URL.item, id]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
+const item = async (id, strategy) => {
+  const paths = [hnapiURL.item, id]
+  const data = await fetchData(paths, strategy)
   return checkdata.item(data)
 }
 
-const user = async (id, forceUpdate = false) => {
-  const resources = [URL.user, id]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
+const user = async (id, strategy) => {
+  const paths = [hnapiURL.user, id]
+  const data = await fetchData(paths, strategy)
   return checkdata.user(data)
 }
 
-const maxitem = async (id, forceUpdate = false) => {
-  const resources = [URL.max]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
+const maxitem = async (strategy) => {
+  const paths = [hnapiURL.max]
+  const data = await fetchData(paths, strategy)
   return checkdata.max(data)
 }
 
-const updates = async (forceUpdate = false) => {
-  const resources = [URL.updates]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
+const updates = async (strategy) => {
+  const paths = [hnapiURL.updates]
+  const data = await fetchData(paths, strategy)
   return checkdata.updates(data)
 }
 
-const stories = async (type, forceUpdate = false) => {
-  const resources = [URL.checkStoriesType(type)]
-  const queries = []
-  const data = await fetchURL(resources, queries, forceUpdate)
+const stories = async (type, strategy) => {
+  const paths = [hnapiURL.checkStoriesType(type)]
+  const data = await fetchData(paths, strategy)
   return checkdata.stories(data)
 }
 

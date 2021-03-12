@@ -1,56 +1,58 @@
 import hnapi from '@/lib/hnapi'
 
 const actions = {
-  async fetchItem (context, payload = {}) {
-    const id = 'id' in payload ? payload.id : 0
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.item(id, forceUpdate)
+  async fetchItem (context, { id }) {
+    const data = await hnapi.fetch.item(id)
     context.commit('replaceItem', data)
     return data
   },
 
-  async fetchUser (context, payload = {}) {
-    const id = 'id' in payload ? payload.id : 0
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.user(id, forceUpdate)
+  async fetchUser (context, { id }) {
+    const data = await hnapi.fetch.user(id)
     context.commit('replaceUser', data)
     return data
   },
 
-  async fetchMax (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.max(forceUpdate)
+  async fetchMax (context) {
+    const data = await hnapi.fetch.max()
     context.commit('replaceMax', data)
     return data
   },
 
-  async fetchUpdates (context, payload = {}) {
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.updates(forceUpdate)
+  async fetchUpdates (context) {
+    const data = await hnapi.fetch.updates()
     context.commit('repaceUpdates', data)
     return data
   },
 
-  async fetchStories (context, payload = {}) {
-    const type = hnapi.url.checkStoriesType(payload.type)
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await hnapi.fetch.stories(type, forceUpdate)
+  async fetchStories (context, { type }) {
+    type = hnapi.url.checkStoriesType(type)
+    const data = await hnapi.fetch.stories(type)
     context.commit('replaceStories', data)
     return data
   },
 
-  async fetchPreviews (context, payload = {}) {
-    const range = 'range' in payload ? payload.range : [0, 20]
-    const forceUpdate = 'forceUpdate' in payload
-    const data = await context.dispatch('fetchStories', payload)
-    const sliced = data.slice(range[0], range[1])
-    const preview = await Promise.all(
-      sliced.map(async (e, i) => {
-        return await hnapi.fetch.item(e, forceUpdate)
-      })
+  async fetchPreviews (context, { type, range = [0, 20] }) {
+    type = hnapi.url.checkStoriesType(type)
+
+    // display cached previews from 'cachedList'
+    const cachedList = await hnapi.fetch.stories(type, 'cacheFirst')
+    const cachedPreviews = await Promise.all(
+      cachedList.slice(range[0], range[1]).map(
+        async (e, i) => await hnapi.fetch.item(e, 'cacheFirst')
+      )
     )
-    context.commit('replacePreviews', preview)
-    return preview
+    context.commit('replacePreviews', cachedPreviews)
+
+    // fetch new list and previews from network,
+    // then update cache and display
+    const networkList = await hnapi.fetch.stories(type, 'networkFirst')
+    const networkPreviews = await Promise.all(
+      networkList.slice(range[0], range[1]).forEach(
+        async (e, i) => await hnapi.fetch.item(e, 'networkFirst')
+      )
+    )
+    context.commit('replacePreviews', networkPreviews)
   }
 
 }

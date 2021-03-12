@@ -25,10 +25,9 @@ const checkStoriesType = input => {
 }
 
 const URL = {
-  db: 'https://hacker-news.firebaseio.com',
-  ver: 'v0',
-  ext: '.json',
-
+  origin: 'https://hacker-news.firebaseio.com',
+  version: 'v0',
+  extension: '.json',
   item: 'item',
   user: 'user',
   max: 'maxitem',
