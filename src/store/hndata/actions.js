@@ -47,7 +47,7 @@ const actions = {
     // fetch new list and previews from network,
     // then update cache and display
     const networkList = await hnapi.fetch.stories(type, 'networkFirst')
-    const networkPreviews = Promise.all(
+    const networkPreviews = await Promise.all(
       networkList.slice(range[0], range[1]).forEach(
         async (e, i) => await hnapi.fetch.item(e, 'networkFirst')
       )
