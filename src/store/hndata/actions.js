@@ -10,9 +10,9 @@ const actions = {
 
   fetchUser (context, { id }) {
     hnapi.fetch.user(id, 'cacheFirst')
-      .then(data => context.commit('replaceItem', data))
+      .then(data => context.commit('replaceUser', data))
     hnapi.fetch.user(id, 'networkFirst')
-      .then(data => context.commit('replaceItem', data))
+      .then(data => context.commit('replaceUser', data))
   },
 
   fetchMax (context) {

@@ -6,7 +6,7 @@
   <div>
     <small class='info'>
       {{ this.item.score }} {{ this.suffixScore }}
-      by <a :href='item.url' v-text='this.item.by'/>
+      by <router-link :to='`user/${this.item.by}`' v-text='this.item.by'/>
       {{ this.fmtDate }}
     </small>
   </div>
@@ -20,7 +20,7 @@ export default {
   props: ['item'],
   computed: {
     suffixKids () {
-      switch (this.kids.length) {
+      switch (this.item.kids.length) {
         case 1: return 'comment'
         default: return 'comments'
       }

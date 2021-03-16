@@ -3,14 +3,14 @@ import UserView from '@/views/UserView'
 
 const items = [
   {
-    path: '/post',
+    path: '/post:/id',
     name: 'post',
     component: PostView,
     category: 'items'
   },
   {
-    path: '/user',
-    name: '/user',
+    path: '/user/:id',
+    name: 'user',
     component: UserView,
     category: 'items'
   }
