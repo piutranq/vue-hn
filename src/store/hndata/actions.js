@@ -1,35 +1,40 @@
 import hnapi from '@/lib/hnapi'
 
 const actions = {
-  async fetchItem (context, { id }) {
-    const data = await hnapi.fetch.item(id)
-    context.commit('replaceItem', data)
-    return data
+  fetchItem (context, { id }) {
+    hnapi.fetch.item(id, 'cacheFirst')
+      .then(data => context.commit('replaceItem', data))
+    hnapi.fetch.item(id, 'networkFirst')
+      .then(data => context.commit('replaceItem', data))
   },
 
-  async fetchUser (context, { id }) {
-    const data = await hnapi.fetch.user(id)
-    context.commit('replaceUser', data)
-    return data
+  fetchUser (context, { id }) {
+    hnapi.fetch.user(id, 'cacheFirst')
+      .then(data => context.commit('replaceItem', data))
+    hnapi.fetch.user(id, 'networkFirst')
+      .then(data => context.commit('replaceItem', data))
   },
 
-  async fetchMax (context) {
-    const data = await hnapi.fetch.max()
-    context.commit('replaceMax', data)
-    return data
+  fetchMax (context) {
+    hnapi.fetch.max('cacheFirst')
+      .then(data => context.commit('replaceMax', data))
+    hnapi.fetch.max('networkFirst')
+      .then(data => context.commit('replaceMax', data))
   },
 
-  async fetchUpdates (context) {
-    const data = await hnapi.fetch.updates()
-    context.commit('repaceUpdates', data)
-    return data
+  fetchUpdates (context) {
+    hnapi.fetch.updates('cacheFirst')
+      .then(data => context.commit('repaceUpdates', data))
+    hnapi.fetch.updates('networkFirst')
+      .then(data => context.commit('repaceUpdates', data))
   },
 
-  async fetchStories (context, { type }) {
+  fetchStories (context, { type }) {
     type = hnapi.url.checkStoriesType(type)
-    const data = await hnapi.fetch.stories(type)
-    context.commit('replaceStories', data)
-    return data
+    hnapi.fetch.stories(type, 'cacheFirst')
+      .then(data => context.commit('replaceStories', data))
+    hnapi.fetch.stories(type, 'networkFirst')
+      .then(data => context.commit('replaceStories', data))
   },
 
   async fetchPreviews (context, { type, range = [0, 20] }) {
