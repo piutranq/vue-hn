@@ -21,7 +21,7 @@ export default {
 
 .compNavBar {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   position: fixed;
   width: 100%;
