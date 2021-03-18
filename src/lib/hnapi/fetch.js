@@ -73,12 +73,25 @@ const stories = async (type, strategy) => {
   return checkdata.stories(data)
 }
 
+const previews = async ({ type, page = 0, amount = 20 }, strategy) => {
+  const list = await stories(type, strategy)
+  const range = [page * amount, ((page + 1) * amount)]
+  const previews = await Promise.all(
+    list.slice(range[0], range[1]).map(
+      async (e, i) => await item(e, strategy)
+    )
+  )
+  console.log(previews)
+  return previews
+}
+
 const fetch = {
   item,
   user,
   maxitem,
   updates,
-  stories
+  stories,
+  previews
 }
 
 export default fetch

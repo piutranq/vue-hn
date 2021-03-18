@@ -37,27 +37,12 @@ const actions = {
       .then(data => context.commit('replaceStories', data))
   },
 
-  async fetchPreviews (context, { type, range = [0, 20] }) {
+  fetchPreviews (context, { type }) {
     type = hnapi.url.checkStoriesType(type)
-
-    // display cached previews from 'cachedList'
-    const cachedList = await hnapi.fetch.stories(type, 'cacheFirst')
-    const cachedPreviews = await Promise.all(
-      cachedList.slice(range[0], range[1]).map(
-        async (e, i) => await hnapi.fetch.item(e, 'cacheFirst')
-      )
-    )
-    context.commit('replacePreviews', cachedPreviews)
-
-    // fetch new list and previews from network,
-    // then update cache and display
-    const networkList = await hnapi.fetch.stories(type, 'networkFirst')
-    const networkPreviews = await Promise.all(
-      networkList.slice(range[0], range[1]).forEach(
-        async (e, i) => await hnapi.fetch.item(e, 'networkFirst')
-      )
-    )
-    context.commit('replacePreviews', networkPreviews)
+    hnapi.fetch.previews({ type }, 'cacheFirst')
+      .then(data => context.commit('replacePreviews', data))
+    hnapi.fetch.previews({ type }, 'networkFirst')
+      .then(data => context.commit('replacePreviews', data))
   }
 
 }
