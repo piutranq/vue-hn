@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>News</h1>
+    <h1>{{ this.$route.name }}</h1>
     <div v-for="item in this.previews" :key="item.id">
       <item-preview :item="item"/>
     </div>
@@ -8,18 +8,14 @@
 </template>
 
 <script>
+import ItemPreview from '@/components/ItemPreview.vue'
 import { mapActions, mapGetters } from 'vuex'
-import ItemPreview from '@/components/ItemPreview'
 
 export default {
   components: { ItemPreview },
   async created () {
-    const type = this.type
-    await this.fetchPreviews({ type })
+    this.fetchPreviews({ type: this.$route.name })
   },
-  data: () => ({
-    type: 'newstories'
-  }),
   computed: {
     ...mapGetters({
       previews: 'hndata/previews'
@@ -29,6 +25,11 @@ export default {
     ...mapActions({
       fetchPreviews: 'hndata/fetchPreviews'
     })
+  },
+  watch: {
+    '$route.name' () {
+      this.fetchPreviews({ type: this.$route.name })
+    }
   }
 }
 </script>

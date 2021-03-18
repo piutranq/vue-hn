@@ -1,26 +1,24 @@
-import NewsView from '@/views/NewsView'
-import AskView from '@/views/AskView'
-import JobsView from '@/views/JobsView'
+import Stories from '@/views/Stories'
 
 const navvar = [
   {
     path: '/news',
-    name: 'news',
-    component: NewsView,
+    name: 'newstories',
+    component: Stories,
     display: 'News',
     category: 'navbar'
   },
   {
     path: '/ask',
-    name: 'ask',
-    component: AskView,
+    name: 'askstories',
+    component: Stories,
     display: 'Ask',
     category: 'navbar'
   },
   {
     path: '/jobs',
-    name: 'jobs',
-    component: JobsView,
+    name: 'jobstories',
+    component: Stories,
     display: 'Jobs',
     category: 'navbar'
   }
