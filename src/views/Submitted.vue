@@ -14,8 +14,8 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   components: { ItemPreview },
   async created () {
-    this.fetchPreviews({
-      type: this.$route.name,
+    this.fetchSubmittedPreviews({
+      id: this.$route.params.id,
       page: this.$route.params.page
     })
   },
@@ -26,13 +26,13 @@ export default {
   },
   methods: {
     ...mapActions({
-      fetchPreviews: 'hndata/fetchPreviews'
+      fetchSubmittedPreviews: 'hndata/fetchSubmittedPreviews'
     })
   },
   watch: {
-    '$route.name' () {
-      this.fetchPreviews({
-        type: this.$route.name,
+    '$route.params.id' () {
+      this.fetchSubmittedPreviews({
+        id: this.$route.params.id,
         page: this.$route.params.page
       })
     }

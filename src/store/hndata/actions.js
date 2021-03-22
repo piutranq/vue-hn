@@ -37,11 +37,18 @@ const actions = {
       .then(data => context.commit('replaceStories', data))
   },
 
-  fetchPreviews (context, { type }) {
+  fetchPreviews (context, { type, page, amount }) {
     type = hnapi.url.checkStoriesType(type)
-    hnapi.fetch.previews({ type }, 'cacheFirst')
+    hnapi.fetch.previews({ type, page, amount }, 'cacheFirst')
       .then(data => context.commit('replacePreviews', data))
-    hnapi.fetch.previews({ type }, 'networkFirst')
+    hnapi.fetch.previews({ type, page, amount }, 'networkFirst')
+      .then(data => context.commit('replacePreviews', data))
+  },
+
+  fetchSubmittedPreviews (context, { id, page, amount }) {
+    hnapi.fetch.submittedPreviews({ id, page, amount }, 'cacheFirst')
+      .then(data => context.commit('replacePreviews', data))
+    hnapi.fetch.submittedPreviews({ id, page, amount }, 'networkFirst')
       .then(data => context.commit('replacePreviews', data))
   }
 

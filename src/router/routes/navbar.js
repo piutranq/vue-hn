@@ -2,21 +2,21 @@ import Stories from '@/views/Stories'
 
 const navvar = [
   {
-    path: '/news',
+    path: '/news/:page',
     name: 'newstories',
     component: Stories,
     display: 'News',
     category: 'navbar'
   },
   {
-    path: '/ask',
+    path: '/ask/:page',
     name: 'askstories',
     component: Stories,
     display: 'Ask',
     category: 'navbar'
   },
   {
-    path: '/jobs',
+    path: '/jobs/:page',
     name: 'jobstories',
     component: Stories,
     display: 'Jobs',

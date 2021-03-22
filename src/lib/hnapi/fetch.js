@@ -18,6 +18,9 @@ class ResponseNotExistError extends Error {
   }
 }
 
+const getRange = ({ page = 0, amount = 20 }) =>
+  [page * amount, (page * amount + amount)]
+
 const fetchData = async (paths, strategy) => {
   const url = paths.join('/') + hnapiURL.extension
   const opt = {
@@ -43,42 +46,58 @@ const fetchData = async (paths, strategy) => {
   return res.data
 }
 
-const item = async (id, strategy) => {
+const fetchItem = async (id, strategy) => {
   const paths = [hnapiURL.item, id]
   const data = await fetchData(paths, strategy)
   return checkdata.item(data)
 }
 
-const user = async (id, strategy) => {
+const fetchUser = async (id, strategy) => {
   const paths = [hnapiURL.user, id]
   const data = await fetchData(paths, strategy)
   return checkdata.user(data)
 }
 
-const maxitem = async (strategy) => {
+const fetchMaxItem = async (strategy) => {
   const paths = [hnapiURL.max]
   const data = await fetchData(paths, strategy)
   return checkdata.max(data)
 }
 
-const updates = async (strategy) => {
+const fetchUpdates = async (strategy) => {
   const paths = [hnapiURL.updates]
   const data = await fetchData(paths, strategy)
   return checkdata.updates(data)
 }
 
-const stories = async (type, strategy) => {
+const fetchStories = async (type, strategy) => {
   const paths = [hnapiURL.checkStoriesType(type)]
   const data = await fetchData(paths, strategy)
   return checkdata.stories(data)
 }
 
-const previews = async ({ type, page = 0, amount = 20 }, strategy) => {
-  const list = await stories(type, strategy)
-  const range = [page * amount, ((page + 1) * amount)]
+const fetchPreviews = async (
+  { type, page, amount }, strategy
+) => {
+  const list = await fetchStories(type, strategy)
+  const range = getRange({ page, amount })
   const previews = await Promise.all(
     list.slice(range[0], range[1]).map(
-      async (e, i) => await item(e, strategy)
+      async (e, i) => await fetchItem(e, strategy)
+    )
+  )
+  return previews
+}
+
+const fetchSubmittedPreviews = async (
+  { id, page, amount }, strategy
+) => {
+  const user = await fetchUser(id, strategy)
+  const submitted = user.submitted
+  const range = getRange({ page, amount })
+  const previews = await Promise.all(
+    submitted.slice(range[0], range[1]).map(
+      async (e, i) => await fetchItem(e, strategy)
     )
   )
   console.log(previews)
@@ -86,12 +105,13 @@ const previews = async ({ type, page = 0, amount = 20 }, strategy) => {
 }
 
 const fetch = {
-  item,
-  user,
-  maxitem,
-  updates,
-  stories,
-  previews
+  item: fetchItem,
+  user: fetchUser,
+  maxitem: fetchMaxItem,
+  updates: fetchUpdates,
+  stories: fetchStories,
+  previews: fetchPreviews,
+  submittedPreviews: fetchSubmittedPreviews
 }
 
 export default fetch
